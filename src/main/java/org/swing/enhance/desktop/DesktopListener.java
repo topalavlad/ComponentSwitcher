@@ -13,6 +13,7 @@ import java.util.List;
 public class DesktopListener extends ContainerAdapter implements SwitchableComponentsListener<JInternalFrame> {
 
     private final List<JInternalFrame> frames = new ArrayList<>();
+    private final boolean titleOptional;
     private final InternalFrameAdapter frameActivatedListener = new InternalFrameAdapter() {
         @Override
         public void internalFrameActivated(InternalFrameEvent e) {
@@ -22,12 +23,22 @@ public class DesktopListener extends ContainerAdapter implements SwitchableCompo
         }
     };
 
+    public DesktopListener() {
+        this(false);
+    }
+
+    public DesktopListener(boolean titleOptional) {
+        this.titleOptional = titleOptional;
+    }
+
     @Override
     public void componentAdded(final ContainerEvent e) {
         if (e.getChild() instanceof JInternalFrame) {
             final JInternalFrame frame = (JInternalFrame) e.getChild();
-            frames.add(frame);
-            frame.addInternalFrameListener(frameActivatedListener);
+            if (isTitleOptional() || frame.getTitle() != null && !frame.getTitle().trim().isEmpty()) {
+                frames.add(frame);
+                frame.addInternalFrameListener(frameActivatedListener);
+            }
         }
     }
 
@@ -38,6 +49,10 @@ public class DesktopListener extends ContainerAdapter implements SwitchableCompo
             frames.remove(frame);
             frame.removeInternalFrameListener(frameActivatedListener);
         }
+    }
+
+    private boolean isTitleOptional() {
+        return titleOptional;
     }
 
     public List<JInternalFrame> getSwitchableComponentList() {
