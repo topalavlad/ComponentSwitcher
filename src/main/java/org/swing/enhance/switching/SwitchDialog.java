@@ -17,6 +17,7 @@ public class SwitchDialog<T> extends JDialog {
         list = new JList<>(new Vector<>(titles));
         list.setCellRenderer(new JInternalFrameCellRenderer());
         list.setSelectedIndex(0);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setContentPane(list);
         pack();
     }
@@ -32,10 +33,20 @@ public class SwitchDialog<T> extends JDialog {
         int indexToSelect = list.getSelectedIndex() != 0
                 ? list.getSelectedIndex() - 1
                 : list.getModel().getSize() - 1;
-        list.setSelectedIndex(indexToSelect);
+        list.setSelectedIndex(indexToSelect > -1 ? indexToSelect : 0);
     }
 
     public T getSelected() {
         return list.getSelectedValue();
+    }
+
+    public void setSwitchableComponents(List<T> switchableComponents) {
+        T oldSelection = list.getSelectedValue();
+        list.setListData(new Vector<>(switchableComponents));
+        list.setSelectedValue(oldSelection, false);
+    }
+
+    public JList<T> getList() {
+        return list;
     }
 }

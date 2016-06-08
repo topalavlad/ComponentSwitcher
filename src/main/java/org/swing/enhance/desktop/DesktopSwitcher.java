@@ -5,6 +5,7 @@ import org.swing.enhance.switching.Switcher;
 
 import javax.swing.*;
 import java.beans.PropertyVetoException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DesktopSwitcher implements Switcher<JInternalFrame> {
@@ -14,6 +15,7 @@ public class DesktopSwitcher implements Switcher<JInternalFrame> {
 
     public DesktopSwitcher(JDesktopPane jDesktopPane) {
         this.jDesktopPane = jDesktopPane;
+        switchDialog = new SwitchDialog<>(SwingUtilities.getWindowAncestor(jDesktopPane), new ArrayList<JInternalFrame>());
     }
 
     public void previous(List<JInternalFrame> switchableComponentList) {
@@ -31,8 +33,9 @@ public class DesktopSwitcher implements Switcher<JInternalFrame> {
     }
 
     private void showMenu(List<JInternalFrame> switchableComponentList) {
-        if (switchDialog == null) {
-            switchDialog = new SwitchDialog<>(SwingUtilities.getWindowAncestor(jDesktopPane), switchableComponentList);
+        switchDialog.setSwitchableComponents(switchableComponentList);
+        if (!switchableComponentList.isEmpty()) {
+            switchDialog.pack();
             switchDialog.setLocationRelativeTo(jDesktopPane);
             switchDialog.setVisible(true);
         }
@@ -41,13 +44,19 @@ public class DesktopSwitcher implements Switcher<JInternalFrame> {
     private void hideMenu() {
         if (switchDialog != null) {
             try {
-                switchDialog.getSelected().setSelected(true);
+                JInternalFrame selected = switchDialog.getSelected();
+                if (selected != null) {
+                    selected.setSelected(true);
+                }
             } catch (PropertyVetoException e) {
                 //todo use a logger
                 e.printStackTrace();
             }
             switchDialog.dispose();
-            switchDialog = null;
         }
+    }
+
+    public SwitchDialog<JInternalFrame> getSwitchDialog() {
+        return switchDialog;
     }
 }
