@@ -46,7 +46,7 @@ public class DesktopDemo {
         tabs.addTab("Tab3", new JPanel());
         jInternalFrame2.add(tabs);
 
-        JInternalFrame jInternalFrame3 = new JInternalFrame("");
+        JInternalFrame jInternalFrame3 = new JInternalFrame("Frame3");
         jInternalFrame3.add(new JButton("Test"));
 
         jDesktopPane.add(jInternalFrame1);

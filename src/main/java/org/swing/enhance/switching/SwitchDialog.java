@@ -15,11 +15,24 @@ public class SwitchDialog<T> extends JDialog {
         super(owner);
         setUndecorated(true);
         list = new JList<>(new Vector<>(titles));
+        initList();
+        setContentPane(list);
+        pack();
+    }
+
+    private void initList() {
         list.setCellRenderer(new JInternalFrameCellRenderer());
         list.setSelectedIndex(0);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        setContentPane(list);
-        pack();
+        list.setSelectionModel(new DefaultListSelectionModel() {
+            @Override
+            public void removeSelectionInterval(int index0, int index1) {}
+
+            @Override
+            public void addSelectionInterval(int index0, int index1) {
+                super.setSelectionInterval(index0, index1);
+            }
+        });
     }
 
     public void selectNext() {

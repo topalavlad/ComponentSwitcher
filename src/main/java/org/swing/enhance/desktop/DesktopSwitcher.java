@@ -4,6 +4,8 @@ import org.swing.enhance.switching.SwitchDialog;
 import org.swing.enhance.switching.Switcher;
 
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ public class DesktopSwitcher implements Switcher<JInternalFrame> {
     public DesktopSwitcher(JDesktopPane jDesktopPane) {
         this.jDesktopPane = jDesktopPane;
         switchDialog = new SwitchDialog<>(SwingUtilities.getWindowAncestor(jDesktopPane), new ArrayList<JInternalFrame>());
+        initMouseListener();
     }
 
     public void previous(List<JInternalFrame> switchableComponentList) {
@@ -30,6 +33,10 @@ public class DesktopSwitcher implements Switcher<JInternalFrame> {
 
     public void dismiss() {
         hideMenu();
+    }
+
+    public SwitchDialog<JInternalFrame> getSwitchDialog() {
+        return switchDialog;
     }
 
     private void showMenu(List<JInternalFrame> switchableComponentList) {
@@ -56,7 +63,12 @@ public class DesktopSwitcher implements Switcher<JInternalFrame> {
         }
     }
 
-    public SwitchDialog<JInternalFrame> getSwitchDialog() {
-        return switchDialog;
+    private void initMouseListener() {
+        switchDialog.getList().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(final MouseEvent e) {
+                hideMenu();
+            }
+        });
     }
 }
