@@ -54,6 +54,7 @@ public class DesktopSwitcher implements Switcher<JInternalFrame> {
                 JInternalFrame selected = switchDialog.getSelected();
                 if (selected != null) {
                     selected.setSelected(true);
+                    selected.toFront();
                 }
             } catch (PropertyVetoException e) {
                 //todo use a logger
