@@ -29,6 +29,12 @@ public class SwitchDispatcher<T> implements KeyEventDispatcher {
     }
 
     public boolean dispatchKeyEvent(KeyEvent e) {
+        boolean shouldSwitch = isDesktopPaneFocused(e.getComponent(), switcher.getDesktop())
+                || switcher.hasFocus();
+        if (!shouldSwitch) {
+            return false;
+        }
+
         KeyStroke keyStrokeForEvent = KeyStroke.getKeyStrokeForEvent(e);
         boolean next = nextStroke.equals(keyStrokeForEvent);
         boolean previous = previousStroke.equals(keyStrokeForEvent);
@@ -42,5 +48,17 @@ public class SwitchDispatcher<T> implements KeyEventDispatcher {
             switcher.dismiss();
         }
         return next || previous || dismiss;
+    }
+
+    private boolean isDesktopPaneFocused(Component component, JDesktopPane desktop) {
+        return getDesktopPaneParent(component) == desktop;
+    }
+
+    private JDesktopPane getDesktopPaneParent(Component component) {
+        Component parent = component;
+        while (parent != null && !(parent instanceof JDesktopPane)) {
+            parent = parent.getParent();
+        }
+        return (JDesktopPane) parent;
     }
 }

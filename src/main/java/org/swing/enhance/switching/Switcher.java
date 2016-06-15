@@ -1,5 +1,6 @@
 package org.swing.enhance.switching;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -27,4 +28,15 @@ public interface Switcher<T> {
      * This method will hide the dialog that shows all the switchable components if it exists.
      */
     void dismiss();
+
+    /**
+     * Returns the desktop pane on which the switcher is working
+     */
+    JDesktopPane getDesktop();
+
+    /**
+     * Checks whether the switcher component currently has focus
+     * @return - true if the switch dialog is open and has focus; false otherwise
+     */
+    boolean hasFocus();
 }

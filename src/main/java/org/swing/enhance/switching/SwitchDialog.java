@@ -4,6 +4,8 @@ import org.swing.enhance.desktop.JInternalFrameCellRenderer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.List;
 import java.util.Vector;
 
@@ -15,6 +17,7 @@ public class SwitchDialog<T> extends JDialog {
         super(owner);
         setUndecorated(true);
         list = new JList<>(new Vector<>(titles));
+        addFocusListener(focusLostListener);
         initList();
         setContentPane(list);
         pack();
@@ -24,6 +27,7 @@ public class SwitchDialog<T> extends JDialog {
         list.setCellRenderer(new JInternalFrameCellRenderer());
         list.setSelectedIndex(0);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.addFocusListener(focusLostListener);
         list.setSelectionModel(new DefaultListSelectionModel() {
             @Override
             public void removeSelectionInterval(int index0, int index1) {}
@@ -62,4 +66,11 @@ public class SwitchDialog<T> extends JDialog {
     public JList<T> getList() {
         return list;
     }
+
+    private final FocusAdapter focusLostListener = new FocusAdapter() {
+        @Override
+        public void focusLost(FocusEvent e) {
+            dispose();
+        }
+    };
 }

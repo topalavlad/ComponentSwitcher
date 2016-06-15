@@ -35,6 +35,16 @@ public class DesktopSwitcher implements Switcher<JInternalFrame> {
         hideMenu();
     }
 
+    @Override
+    public JDesktopPane getDesktop() {
+        return jDesktopPane;
+    }
+
+    @Override
+    public boolean hasFocus() {
+        return switchDialog.hasFocus() || switchDialog.getList().hasFocus();
+    }
+
     public SwitchDialog<JInternalFrame> getSwitchDialog() {
         return switchDialog;
     }
