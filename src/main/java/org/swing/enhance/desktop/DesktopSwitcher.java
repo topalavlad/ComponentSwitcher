@@ -59,7 +59,7 @@ public class DesktopSwitcher implements Switcher<JInternalFrame> {
     }
 
     private void hideMenu() {
-        if (switchDialog != null) {
+        if (switchDialog != null && switchDialog.isVisible()) {
             try {
                 JInternalFrame selected = switchDialog.getSelected();
                 if (selected != null) {
