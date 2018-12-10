@@ -44,13 +44,15 @@ public class SwitchDialog<T> extends JDialog {
                 ? list.getSelectedIndex() + 1
                 : 0;
         list.setSelectedIndex(indexToSelect);
+        list.ensureIndexIsVisible(indexToSelect);
     }
 
     public void selectPrevious() {
-        int indexToSelect = list.getSelectedIndex() != 0
+        int indexToSelect = Math.max(0, list.getSelectedIndex() != 0
                 ? list.getSelectedIndex() - 1
-                : list.getModel().getSize() - 1;
-        list.setSelectedIndex(indexToSelect > -1 ? indexToSelect : 0);
+                : list.getModel().getSize() - 1);
+        list.setSelectedIndex(indexToSelect);
+        list.ensureIndexIsVisible(indexToSelect);
     }
 
     public T getSelected() {
